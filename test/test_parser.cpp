@@ -1,7 +1,9 @@
 #include "ticker_data.hpp"
+
 #include <gtest/gtest.h>
 
-TEST(TickerDataTest, ParsesValidJson) {
+TEST(TickerDataTest, ParsesValidJson)
+{
     std::string json_str = R"({
         "type": "ticker",
         "product_id": "BTC-USD",
@@ -22,7 +24,8 @@ TEST(TickerDataTest, ParsesValidJson) {
     EXPECT_EQ(data.time, "2024-06-18T12:00:00Z");
 }
 
-TEST(TickerDataTest, SkipsNonTickerType) {
+TEST(TickerDataTest, SkipsNonTickerType)
+{
     std::string json_str = R"({"type": "subscriptions"})";
     auto result = TickerData::from_json(json_str);
     EXPECT_FALSE(result.has_value());

@@ -1,6 +1,7 @@
 #pragma once
 
-class EmaCalculator {
+class EmaCalculator
+{
 public:
     EmaCalculator(double alpha);
 

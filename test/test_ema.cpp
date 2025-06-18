@@ -1,10 +1,12 @@
 #include "ema_calculator.hpp"
+
 #include <gtest/gtest.h>
 
-TEST(EmaCalculatorTest, ComputesCorrectly) {
-    EmaCalculator ema(0.5);  // α = 0.5
+TEST(EmaCalculatorTest, ComputesCorrectly)
+{
+    EmaCalculator ema(0.5); // α = 0.5
 
-    ema.add(10);  // первая инициализация
+    ema.add(10);
     EXPECT_TRUE(ema.has_value());
     EXPECT_DOUBLE_EQ(ema.value(), 10.0);
 

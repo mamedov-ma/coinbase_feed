@@ -1,14 +1,16 @@
 #pragma once
-#include <string>
 #include <optional>
+#include <string>
+
 #include <nlohmann/json.hpp>
 
-struct TickerData {
+struct TickerData
+{
     std::string product_id;
     double price;
     double best_bid;
     double best_ask;
     std::string time;
 
-    static std::optional<TickerData> from_json(const std::string& raw);
+    static std::optional<TickerData> from_json(std::string const& raw);
 };

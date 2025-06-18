@@ -1,10 +1,13 @@
 #include "ticker_data.hpp"
+
 #include <iostream>
 
 using json = nlohmann::json;
 
-std::optional<TickerData> TickerData::from_json(const std::string& raw) {
-    try {
+std::optional<TickerData> TickerData::from_json(std::string const& raw)
+{
+    try
+    {
         json j = json::parse(raw);
 
         if (j["type"] != "ticker") return std::nullopt;
@@ -17,7 +20,9 @@ std::optional<TickerData> TickerData::from_json(const std::string& raw) {
         data.time = j.at("time").get<std::string>();
 
         return data;
-    } catch (const std::exception& e) {
+    }
+    catch (std::exception const& e)
+    {
         std::cerr << "[Parse error] " << e.what() << std::endl;
         return std::nullopt;
     }

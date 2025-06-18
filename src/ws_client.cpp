@@ -1,8 +1,10 @@
 #include "ws_client.hpp"
+
 #include <iostream>
-#include <nlohmann/json.hpp>
+
 #include <boost/asio/connect.hpp>
 #include <boost/beast/websocket.hpp>
+#include <nlohmann/json.hpp>
 
 using tcp = boost::asio::ip::tcp;
 namespace websocket = boost::beast::websocket;
@@ -10,32 +12,39 @@ namespace ssl = boost::asio::ssl;
 using json = nlohmann::json;
 
 WebSocketClient::WebSocketClient()
-    : ssl_ctx_(ssl::context::tlsv12_client),
-      resolver_(ioc_),
-      ws_(ioc_, ssl_ctx_),
-      running_(false) {
+    : ssl_ctx_(ssl::context::tlsv12_client)
+    , resolver_(ioc_)
+    , ws_(ioc_, ssl_ctx_)
+    , running_(false)
+{
     ssl_ctx_.set_verify_mode(ssl::verify_none);
 }
 
-WebSocketClient::~WebSocketClient() {
+WebSocketClient::~WebSocketClient()
+{
     stop();
 }
 
-void WebSocketClient::run() {
+void WebSocketClient::run()
+{
     running_ = true;
     listener_thread_ = std::thread([this]() { connect(); });
 }
 
-void WebSocketClient::stop() {
+void WebSocketClient::stop()
+{
     running_ = false;
     ioc_.stop();
-    if (listener_thread_.joinable()) {
+    if (listener_thread_.joinable())
+    {
         listener_thread_.join();
     }
 }
 
-void WebSocketClient::connect() {
-    try {
+void WebSocketClient::connect()
+{
+    try
+    {
         auto const results = resolver_.resolve("echo.websocket.events", "443");
         ws_.handshake("echo.websocket.events", "/");
 
@@ -49,33 +58,38 @@ void WebSocketClient::connect() {
                 req.set(boost::beast::http::field::upgrade, "websocket");
                 req.set(boost::beast::http::field::connection, "Upgrade");
                 req.set("Sec-WebSocket-Version", "13");
-            }
-        ));
+            }));
 
         ws_.handshake("ws-feed.exchange.coinbase.com", "/");
         std::cout << "WebSocket connected & handshake successful.\n";
         json sub_msg = {
             {"type", "subscribe"},
-            {"channels", {{{"name", "ticker"}, {"product_ids", {"BTC-USD"}}}}}
-        };
+            {"channels", {{{"name", "ticker"}, {"product_ids", {"BTC-USD"}}}}}};
         ws_.write(boost::asio::buffer(sub_msg.dump()));
 
         listen();
-    } catch (const std::exception& ex) {
+    }
+    catch (std::exception const& ex)
+    {
         std::cerr << "WebSocket connect error: " << ex.what() << std::endl;
     }
 }
 
-void WebSocketClient::listen() {
+void WebSocketClient::listen()
+{
     boost::beast::flat_buffer buffer;
 
-    while (running_) {
-        try {
+    while (running_)
+    {
+        try
+        {
             ws_.read(buffer);
             std::string message = boost::beast::buffers_to_string(buffer.data());
             std::cout << "Received: " << message << std::endl;
             buffer.consume(buffer.size());
-        } catch (const std::exception& ex) {
+        }
+        catch (std::exception const& ex)
+        {
             std::cerr << "WebSocket read error: " << ex.what() << std::endl;
             break;
         }

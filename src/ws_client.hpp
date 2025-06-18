@@ -1,14 +1,16 @@
 #pragma once
-#include <boost/beast/core.hpp>
-#include <boost/beast/websocket.hpp>
-#include <boost/beast/ssl.hpp>
-#include <boost/asio/ip/tcp.hpp>
-#include <boost/asio/ssl/context.hpp>
+#include <atomic>
 #include <string>
 #include <thread>
-#include <atomic>
 
-class WebSocketClient {
+#include <boost/asio/ip/tcp.hpp>
+#include <boost/asio/ssl/context.hpp>
+#include <boost/beast/core.hpp>
+#include <boost/beast/ssl.hpp>
+#include <boost/beast/websocket.hpp>
+
+class WebSocketClient
+{
 public:
     WebSocketClient();
     ~WebSocketClient();
