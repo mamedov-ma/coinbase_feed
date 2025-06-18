@@ -1,6 +1,5 @@
 build
 *.log
-*.txt
 .cache
 .codelite
 .vscode

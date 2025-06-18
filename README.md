@@ -117,6 +117,7 @@ ctest --output-on-failure
 
 ## 🗂 Project Structure
 
+```bash
 .
 ├── CMakeLists.txt
 ├── README.md
@@ -128,11 +129,14 @@ ctest --output-on-failure
 │   ├── test_ema.cpp              # Unit test for EMA
 │   └── test_parser.cpp           # Unit test for JSON parsing
 └── log.csv                       # Output file
+```
 
 ## 🧠 Design Summary
+```
  • main.cpp sets up and starts the ix::WebSocket client.
  • On onMessage, it parses the JSON, calculates EMA, and logs values.
  • TickerData::from_json() safely parses required fields from incoming messages.
  • EmaCalculator implements standard EMA calculation with configurable alpha.
  • CsvLogger appends structured rows to a CSV file and flushes output for data safety.
  • GoogleTest is integrated via FetchContent in CMakeLists.txt.
+ ```
